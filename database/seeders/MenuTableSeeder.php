@@ -98,6 +98,42 @@ class MenuTableSeeder extends Seeder
                     'admin.faculty.destroy',
                 ],
             ],
+            [
+                "title" => "Semester",
+                "class" => "nav-item",
+                "order" => 2,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.semester.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.semester.index',
+                    'admin.semester.create',
+                    'admin.semester.edit',
+                    'admin.semester.destroy',
+                ],
+            ],
+            [
+                "title" => "Section",
+                "class" => "nav-item",
+                "order" => 2,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.section.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.section.index',
+                    'admin.section.create',
+                    'admin.section.edit',
+                    'admin.section.destroy',
+                ],
+            ],
 //            [
 //                "title" => "Academics",
 //                "class" => "nav-item",
