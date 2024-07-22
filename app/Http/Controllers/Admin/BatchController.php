@@ -3,29 +3,37 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SyllabusRequest;
+use App\Http\Requests\Admin\BatchRequest;
+use App\Services\BatchService;
 use App\Services\SyllabusService;
 use Illuminate\Http\Request;
 
-class SyllabusController extends Controller
+class BatchController extends Controller
 {
     /**
      * @var string
      */
-    private $view = 'admin.syllabus.';
+    private $view = 'admin.batch.';
+    /**
+     * @var BatchService
+     */
+    private $batchService;
     /**
      * @var SyllabusService
      */
     private $syllabusService;
 
     /**
-     * SyllabusController constructor.
+     * BatchController constructor.
+     * @param BatchService $batchService
      * @param SyllabusService $syllabusService
      */
     public function __construct(
+        BatchService $batchService,
         SyllabusService $syllabusService
     )
     {
+        $this->batchService = $batchService;
         $this->syllabusService = $syllabusService;
     }
 
@@ -35,7 +43,7 @@ class SyllabusController extends Controller
     public function index(Request $request)
     {
         if ($request->wantsJson()) {
-            return $this->syllabusService->datatable($request);
+            return $this->batchService->datatable($request);
         }
         return view($this->view . 'index');
     }
@@ -45,17 +53,19 @@ class SyllabusController extends Controller
      */
     public function create()
     {
-        return view($this->view.'create');
+        $syllabi = $this->syllabusService->allForDropDown();
+
+        return view($this->view.'create', compact('syllabi'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BatchRequest $request)
     {
-        $this->syllabusService->create($request->all());
+        $this->batchService->create($request->all());
 
-        return $this->syllabusService->redirect('admin.syllabus.index', 'success', 'Syllabus created successfully');
+        return $this->batchService->redirect('admin.batch.index', 'success', 'Batch created successfully');
     }
 
     /**
@@ -63,6 +73,7 @@ class SyllabusController extends Controller
      */
     public function show(string $id)
     {
+        //
     }
 
     /**
@@ -70,19 +81,20 @@ class SyllabusController extends Controller
      */
     public function edit(string $id)
     {
-        $syllabus = $this->syllabusService->find($id);
+        $batch = $this->batchService->find($id);
+        $syllabi = $this->syllabusService->allForDropDown();
 
-        return view($this->view.'edit', compact('syllabus'));
+        return view($this->view.'edit', compact('batch', 'syllabi'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(SyllabusRequest $request, string $id)
+    public function update(BatchRequest $request, string $id)
     {
-        $this->syllabusService->update($id, $request->all());
+        $this->batchService->update($id, $request->all());
 
-        return $this->syllabusService->redirect('admin.syllabus.index', 'success', 'Syllabus updated successfully');
+        return $this->batchService->redirect('admin.batch.index', 'success', 'Batch updated successfully');
     }
 
     /**
@@ -90,7 +102,7 @@ class SyllabusController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->syllabusService->destroy($id);
+        $this->batchService->destroy($id);
 
         return redirect()->back();
     }

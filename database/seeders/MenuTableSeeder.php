@@ -63,6 +63,24 @@ class MenuTableSeeder extends Seeder
                 ],
             ],
             [
+                "title" => "Batch",
+                "class" => "nav-item",
+                "order" => 2,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.batch.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.batch.index',
+                    'admin.batch.create',
+                    'admin.batch.edit',
+                    'admin.batch.destroy',
+                ],
+            ],
+            [
                 "title" => "Faculty",
                 "class" => "nav-item",
                 "order" => 2,
