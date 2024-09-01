@@ -41,6 +41,19 @@ abstract class BaseService
     {
         return $this->all()->pluck($value, $key);
     }
+
+    /**
+     * @param string $value
+     * @param string $key
+     * @return \Illuminate\Support\Collection
+     */
+    public function select2DropDown($placeholder = 'Select a state', $value = 'name', $key = 'id')
+    {
+        $response = $this->all();
+        $response->prepend(['name' =>'Select Faculty', 'id' => null]);
+        return $response->pluck($value, $key);
+
+    }
     /**
      * Return all the models
      * @param bool $dataTable

@@ -16,6 +16,54 @@ class SubjectTableSeeder extends Seeder
     {
         $subjects = [
             [
+                'name' => 'Engineering Mathematics 1',
+                'code' => 'MTH 111',
+                'credit_hour' => 3,
+                'syllabus_id' => 1,
+                'faculty_id' => FacultyConstant::COMPUTER_ID,
+                'semester_id' => 9
+            ],
+            [
+                'name' => 'Chemistry',
+                'code' => 'MTH 111',
+                'credit_hour' => 3,
+                'syllabus_id' => 1,
+                'faculty_id' => FacultyConstant::COMPUTER_ID,
+                'semester_id' => 9
+            ],
+            [
+                'name' => 'Communication Technique',
+                'code' => 'MTH 111',
+                'credit_hour' => 3,
+                'syllabus_id' => 1,
+                'faculty_id' => FacultyConstant::COMPUTER_ID,
+                'semester_id' => 9
+            ],
+            [
+                'name' => 'Programming in C',
+                'code' => 'MTH 111',
+                'credit_hour' => 3,
+                'syllabus_id' => 1,
+                'faculty_id' => FacultyConstant::COMPUTER_ID,
+                'semester_id' => 9
+            ],
+            [
+                'name' => 'Basic Electrical Engineering',
+                'code' => 'MTH 111',
+                'credit_hour' => 3,
+                'syllabus_id' => 1,
+                'faculty_id' => FacultyConstant::COMPUTER_ID,
+                'semester_id' => 9
+            ],
+            [
+                'name' => 'Mechanical Workshop',
+                'code' => 'MTH 111',
+                'credit_hour' => 3,
+                'syllabus_id' => 1,
+                'faculty_id' => FacultyConstant::COMPUTER_ID,
+                'semester_id' => 9
+            ],
+            [
                 'name' => 'Numerical Methods',
                 'code' => 'MTH 230',
                 'credit_hour' => 3,

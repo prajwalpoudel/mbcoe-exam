@@ -106,4 +106,10 @@ class SemesterController extends Controller
 
         return redirect()->back();
     }
+
+    public function getSemestersByFaculty($facultyId) {
+        $semesters = $this->semesterService->getWhere(['faculty_id' => $facultyId]);
+
+        return response()->json($semesters);
+    }
 }

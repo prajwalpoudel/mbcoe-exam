@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index() {
+//        phpinfo();
         return view('admin.dashboard.index');
     }
 }

@@ -134,54 +134,94 @@ class MenuTableSeeder extends Seeder
                     'admin.section.destroy',
                 ],
             ],
-//            [
-//                "title" => "Academics",
-//                "class" => "nav-item",
-//                "order" => 3,
-//                "icon" => "fa fa-envelope",
-//                "is_active" => true,
-//                "route" => "admin.academics.grade.index",
-//                "group_id" => MenuGroupConstant::ADMIN_ID,
-//                "children" => [
-//                    [
-//
-//                        "title" => "Grade",
-//                        "class" => "nav-item",
-//                        "order" => 1,
-//                        "icon" => "fa fa-envelope",
-//                        "is_active" => true,
-//                        "route" => "admin.academics.grade.index",
-//                        "group_id" => MenuGroupConstant::ADMIN_ID,
-//                        "related_routes" => [
-//                            'admin.academics.grade.index',
-//                            'admin.academics.grade.create',
-//                            'admin.academics.grade.edit',
-//                        ],
-//                    ],
-//                    [
-//                        "title" => "Subject",
-//                        "class" => "nav-item",
-//                        "order" => 2,
-//                        "icon" => "fa fa-envelope",
-//                        "is_active" => true,
-//                        "route" => "admin.academics.subject.index",
-//                        "group_id" => MenuGroupConstant::ADMIN_ID,
-//                        "related_routes" => [
-//                            'admin.academics.subject.index',
-//                            'admin.academics.subject.create',
-//                            'admin.academics.subject.edit',
-//                        ],
-//                    ],
-//                ],
-//                "related_routes" => [
-//                    'admin.academics.grade.index',
-//                    'admin.academics.grade.create',
-//                    'admin.academics.grade.edit',
-//                    'admin.academics.subject.index',
-//                    'admin.academics.subject.create',
-//                    'admin.academics.subject.edit',
-//                ],
-//            ],
+            [
+                "title" => "Subject",
+                "class" => "nav-item",
+                "order" => 2,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.subject.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.subject.index',
+                    'admin.subject.create',
+                    'admin.subject.edit',
+                    'admin.subject.destroy',
+                ],
+            ],
+            [
+                "title" => "Exam Type",
+                "class" => "nav-item",
+                "order" => 2,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.exam-type.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.exam-type.index',
+                    'admin.exam-type.create',
+                    'admin.exam-type.edit',
+                    'admin.exam-type.destroy',
+                ],
+            ],
+            [
+                "title" => "Exam",
+                "class" => "nav-item",
+                "order" => 2,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.exam.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.exam.index',
+                    'admin.exam.create',
+                    'admin.exam.edit',
+                    'admin.exam.destroy',
+                ],
+            ],
+            [
+                "title" => "Student",
+                "class" => "nav-item",
+                "order" => 1,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.student.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.student.index',
+                    'admin.student.create',
+                    'admin.student.edit',
+                ]
+            ],
+            [
+                "title" => "Result",
+                "class" => "nav-item",
+                "order" => 1,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.result.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.result.index',
+                    'admin.result.create',
+                    'admin.result.edit',
+                ]
+            ],
         ];
 
         $groups = [

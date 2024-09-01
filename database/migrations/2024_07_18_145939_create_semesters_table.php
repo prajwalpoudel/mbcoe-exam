@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('display_name')->nullable();
             $table->string('code')->nullable();
+            $table->integer('order')->nullable();
             $table->foreignId('faculty_id')->constrained('faculties')->onDelete('cascade')->nullable();
             $table->timestamps();
         });

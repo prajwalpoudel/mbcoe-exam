@@ -23,6 +23,8 @@ class SectionRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'faculty_id' => 'required',
+            'semester_id' => 'required',
             'name' => 'required'
         ];
     }
