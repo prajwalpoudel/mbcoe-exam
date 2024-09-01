@@ -44,6 +44,7 @@
     <link href="{{ asset('assets/admin/css') }}/style.css" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/admin/css') }}/summernote.css" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/admin/css') }}/toastr.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/admin/css') }}/wizard-4.css" rel="stylesheet" type="text/css" />
 
     <!--end::Layout Skins -->
     <link rel="shortcut icon" href="{{ asset('assets/admin/icons') }}/favicon.ico" />
@@ -80,19 +81,7 @@
             </div>
 
             <!-- begin:: Footer -->
-            <div class="kt-footer  kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop" id="kt_footer">
-                <div class="kt-container  kt-container--fluid ">
-                    <div class="kt-footer__copyright">
-                        2019&nbsp;&copy;&nbsp;<a href="http://keenthemes.com/metronic" target="_blank" class="kt-link">Keenthemes</a>
-                    </div>
-                    <div class="kt-footer__menu">
-                        <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">About</a>
-                        <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">Team</a>
-                        <a href="http://keenthemes.com/metronic" target="_blank" class="kt-footer__menu-link kt-link">Contact</a>
-                    </div>
-                </div>
-            </div>
-
+            @include('admin.includes.footer')
             <!-- end:: Footer -->
         </div>
     </div>

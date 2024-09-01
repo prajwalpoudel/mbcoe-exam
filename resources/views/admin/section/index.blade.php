@@ -25,7 +25,7 @@
         <div class="kt-portlet__body">
             <table class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer" width="100%" id="section-table">
                 <thead>
-                <tr>
+                    <tr>
                     <th>#</th>
                     <th>Name</th>
                     <th>Faculty</th>

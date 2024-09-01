@@ -2,7 +2,7 @@
     <div class="form-group row validated">
         <div class="col-lg-6">
             {{ html()->label('Faculty') }}
-            {{ html()->select('faculty_id', $faculties, $section->faculty_id ?? null)->class($errors->has('faculty_id') ? 'form-control is-invalid' : 'form-control')  }}
+            {{ html()->select('faculty_id', $faculties, $section->faculty_id ?? null)->class($errors->has('faculty_id') ? 'form-control is-invalid' : 'form-control')->id('faculty')  }}
             @error('faculty_id')
             <div id="" class="error invalid-feedback"> {{ $message }}</div>
             @enderror
@@ -10,7 +10,7 @@
 
         <div class="col-lg-6">
             {{ html()->label('Semester') }}
-            {{ html()->select('semester_id', [], $semester->semester_id ?? null)->class($errors->has('semester_id') ? 'form-control is-invalid' : 'form-control')  }}
+            {{ html()->select('semester_id', [], $semester->semester_id ?? null)->class($errors->has('semester_id') ? 'form-control is-invalid' : 'form-control')->id('semester')  }}
             @error('semester_id')
             <div id="" class="error invalid-feedback"> {{ $message }}</div>
             @enderror

@@ -17,3 +17,53 @@
         {{ html()->closeModelForm() }}
     </div>
 @endsection
+@push('script')
+    <script>
+        $(document).ready(function() {
+            $('#faculty').select2({
+                placeholder: 'Select Faculty',
+                allowClear: true,
+            });
+            var facultyId =  $('#faculty').val();
+            getSectionsByFaculty(facultyId);
+
+            $('#faculty').change(function() {
+                var facultyId = $(this).val();
+                getSectionsByFaculty(facultyId);
+            });
+            $('#semester').select2({
+                placeholder: 'Select Semester',
+                allowClear: true,
+            });
+        });
+
+        function getSectionsByFaculty(facultyId, defaultSelected = null) {
+            var semesters = $('#semester').select2({
+                placeholder: 'Select Semester',
+                allowClear: true,
+                ajax: {
+                    url: "/admin/api/faculty/" + facultyId + '/semesters',
+                    'dataType': 'json',
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.name
+                                };
+                            })
+                        }
+                    }
+                },
+            }).val(2).trigger('change');
+
+            if (defaultSelected) {
+                _.each(defaultSelected, function (data) {
+                    var option = new Option(data.text, data.id, true, true);
+                    semesters.append(option);
+                })
+                semesters.trigger('change');
+            }
+        }
+    </script>
+@endpush

@@ -53,7 +53,7 @@ class SectionController extends Controller
      */
     public function create()
     {
-        $faculties = $this->facultyService->allForDropDown();
+        $faculties = $this->facultyService->select2DropDown('Select faculty');
 
         return view($this->view.'create', compact('faculties'));
     }
@@ -82,7 +82,7 @@ class SectionController extends Controller
      */
     public function edit(string $id)
     {
-        $section = $this->sectionService->find($id);
+        $section = $this->sectionService->find($id)->load('semester');
         $faculties = $this->facultyService->allForDropDown();
 
         return view($this->view.'edit', compact('section', 'faculties'));
