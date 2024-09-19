@@ -22,6 +22,13 @@ class Student extends Model
     /**
      * @return BelongsTo
      */
+    public function batch() {
+        return $this->belongsTo(Batch::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
     public function faculty() {
         return $this->belongsTo(Faculty::class);
     }
@@ -31,13 +38,6 @@ class Student extends Model
      */
     public function semesters() {
         return $this->belongsToMany(Semester::class, 'semester_student', 'student_id', 'semester_id')->withPivot(['is_current']);
-    }
-
-    /**
-     * @return BelongsToMany
-     */
-    public function semester() {
-        return $this->belongsToMany(Semester::class, 'semester_student', 'student_id', 'semester_id')->wherePivot('is_current', '=',true);
     }
 
     public function results() {

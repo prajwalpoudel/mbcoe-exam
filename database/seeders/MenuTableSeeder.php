@@ -77,6 +77,7 @@ class MenuTableSeeder extends Seeder
                     'admin.batch.index',
                     'admin.batch.create',
                     'admin.batch.edit',
+                    'admin.batch.show',
                     'admin.batch.destroy',
                 ],
             ],

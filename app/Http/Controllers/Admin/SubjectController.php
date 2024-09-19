@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SubjectExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SubjectRequest;
+use App\Imports\SubjectImport;
 use App\Services\FacultyService;
 use App\Services\SubjectService;
 use App\Services\SyllabusService;
+use Illuminate\Container\Container;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SubjectController extends Controller
 {
@@ -105,6 +109,28 @@ class SubjectController extends Controller
         $this->subjectService->update($id, $request->all());
 
         return $this->subjectService->redirect('admin.subject.index', 'success', 'Subject updated successfully');
+    }
+
+    /**
+     * @return Container|mixed|object
+     */
+    public function import() {
+        return view($this->view.'import');
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function storeImport(Request $request){
+        $file = $request->file('file');
+        Excel::import(new SubjectImport, $file);
+
+        return $this->subjectService->redirect('admin.subject.index', 'success', 'Subject imported successfully');
+    }
+
+    public function exportSample() {
+        return Excel::download(new SubjectExport, 'subject.xlsx');
     }
 
     /**

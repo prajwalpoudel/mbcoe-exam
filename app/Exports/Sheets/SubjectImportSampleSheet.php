@@ -1,86 +1,55 @@
 <?php
 
-
 namespace App\Exports\Sheets;
 
-
 use App\Constants\FacultyConstant;
-use App\Models\Batch;
 use App\Models\Faculty;
 use App\Models\Semester;
-use App\Models\Student;
+use App\Models\Syllabus;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
-use PhpOffice\PhpSpreadsheet\Calculation\LookupRef\VLookup;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 
-class StudentImportSampleSheet implements FromCollection, WithHeadings, WithEvents, WithTitle, WithMapping
+class SubjectImportSampleSheet implements FromCollection, WithHeadings, WithEvents, WithTitle, WithMapping
 {
     protected $selects;
     protected $row_count;
-    protected $bCount = 0;
     protected $fCount = 0;
     protected $sCount = 0;
-
+    protected $syCount = 0;
 
     public function __construct()
     {
         $this->row_count = 10;
-        $batches = Batch::pluck('name', 'id')->toArray();
-        $this->bCount = count($batches) ?? 0;
         $faculties = Faculty::pluck('name', 'id')->toArray();
         $this->fCount = count($faculties) ?? 0;
+        $syllabus = Syllabus::pluck('name', 'id')->toArray();
+        $this->syCount = count($syllabus) ?? 0;
         $semesters = Semester::groupBy('name')->orderBy('order')->pluck('name', 'id')->toArray();
-        $this->sCount = count($semesters) ?? 0;
+        $this->sCount = count(Semester::all()) ?? 0;
         $selects = [  //selects should have column_name and options
-            ['columns_name' => 'H', 'options' => $batches],
-            ['columns_name' => 'J', 'options' => $faculties], //Column D has heading departments. See headings() method below
-            ['columns_name' => 'L', 'options' => $semesters],
+            ['columns_name' => 'D', 'options' => $syllabus],
+            ['columns_name' => 'F', 'options' => $faculties], //Column D has heading departments. See headings() method below
+            ['columns_name' => 'H', 'options' => $semesters],
         ];
 
         $this->selects = $selects;
     }
 
     /**
-     * @return \Illuminate\Support\Collection
-     */
+    * @return \Illuminate\Support\Collection
+    */
     public function collection()
     {
-        $student = Student::first();
-
         return collect([
             []
         ]);
     }
 
-    public function headings(): array
-    {
-        return [
-            'name',
-            'email',
-            'address',
-            'phone',
-            'symbol_no',
-            'registration_number',
-            'admitted_year',
-            'batch',
-            'batch_id',
-            'faculty',
-            'faculty_id',
-            'semester',
-            'semester_id',
-        ];
-    }
-
-
-    /**
-     * @return \Closure[]
-     */
     public function registerEvents(): array
     {
         return [
@@ -113,9 +82,20 @@ class StudentImportSampleSheet implements FromCollection, WithHeadings, WithEven
         ];
     }
 
-    public function title(): string
+    public function headings(): array
     {
-        return 'students';
+        return [
+            'name',
+            'code',
+            'credit_hour',
+            'syllabus',
+            'syllabus_id',
+            'faculty',
+            'faculty_id',
+            'semester',
+            'semester_id',
+            'is_elective'
+        ];
     }
 
     public function map($row): array
@@ -124,16 +104,18 @@ class StudentImportSampleSheet implements FromCollection, WithHeadings, WithEven
             '',
             '',
             '',
-            '',
-            '',
-            '',
-            '',
-            '2075',
-            "=VLOOKUP(H2,batches!A$1:C{$this->bCount},2,FALSE)",
+            'Old Syllabus',
+            "=VLOOKUP(D2,syllabus!A$1:C{$this->syCount},2,FALSE)",
             FacultyConstant::CIVIL,
-            "=VLOOKUP(J2,faculties!A$1:C{$this->fCount},2,FALSE)",
+            "=VLOOKUP(F2,faculties!A$1:C{$this->fCount},2,FALSE)",
             'First',
-            "=VLOOKUP((J2&"."\"-\""."&L2),semesters!A$1:C{$this->sCount},2,FALSE)",
+            "=VLOOKUP((F2&"."\"-\""."&H2),semesters!A$1:C{$this->sCount},2,FALSE)",
+            '0',
         ];
+    }
+
+    public function title(): string
+    {
+        return 'subjects';
     }
 }

@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Admin\User;
 
+use App\Constants\StatusConstant;
 use App\Exports\StudentSampleExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StudentRequest;
 use App\Imports\UsersImport;
+use App\Models\Result;
+use App\Models\Subject;
 use App\Services\BatchService;
 use App\Services\FacultyService;
+use App\Services\SemesterService;
 use App\Services\StudentService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -33,22 +38,29 @@ class StudentController extends Controller
      * @var BatchService
      */
     private $batchService;
+    /**
+     * @var SemesterService
+     */
+    private $semesterService;
 
     /**
      * StudentController constructor.
      * @param StudentService $studentService
      * @param FacultyService $facultyService
      * @param BatchService $batchService
+     * @param SemesterService $semesterService
      */
     public function __construct(
         StudentService $studentService,
         FacultyService $facultyService,
-        BatchService $batchService
+        BatchService $batchService,
+        SemesterService $semesterService
     )
     {
         $this->studentService = $studentService;
         $this->facultyService = $facultyService;
         $this->batchService = $batchService;
+        $this->semesterService = $semesterService;
     }
 
     /**
@@ -59,7 +71,12 @@ class StudentController extends Controller
         if ($request->wantsJson()) {
             return $this->studentService->datatable($request);
         }
-        return view($this->view . 'index');
+        $faculties = $this->facultyService->all()->pluck('name', 'id');
+        $faculties->prepend('All', null);
+        $semesters = $this->semesterService->query()->groupBy('name')->orderBy('id')->pluck('name', 'name');
+        $semesters->prepend('All', null);
+
+        return view($this->view . 'index', compact('faculties', 'semesters'));
     }
 
     /**
@@ -108,52 +125,22 @@ class StudentController extends Controller
     }
 
     public function result(string $id) {
-        $student = $this->studentService->find($id);
-        $student->load(['user', 'faculty', 'results']);
+        $response = $this->studentService->result($id);
+        $student = $response['student'];
+        $data = $response['data'];
+        $exams = $response['exams'];
 
-        $response = DB::table('results')
-            ->join('subjects', 'subjects.id', '=', 'subject_id')
-            ->join('semesters', 'semesters.id', '=', 'subjects.semester_id')
-            ->join('exams', 'exams.id', '=', 'results.exam_id')
-            ->join('exam_types', 'exam_types.id', '=', 'exams.exam_type_id')
-            ->where('student_id', $id);
+        return view($this->view.'details.result.index', compact('student', 'data', 'exams'));
+    }
 
-        $semesterExams = $response->select('exams.name as exam', 'exam_types.name as examType', 'semesters.name as semester')
-            ->distinct('exam', 'examType', 'semester')->orderBy('semesters.display_name', 'asc')->orderBy('exams.name', 'asc')->get();
+    public function transcript(string $id) {
+        $response = $this->studentService->result($id);
+        $student = $response['student'];
+        $data = $response['data'];
+        $exams = $response['exams'];
 
-        $semesterExamsData = [];
-        foreach($semesterExams as $se) {
-            $semesterExamsData[$se->semester][] = [
-                'exam' => $se->exam,
-                'examType' => $se->examType,
-            ];
-        }
-        $response = $response->orderBy('semesters.display_name', 'asc')
-            ->select('grade', 'remarks', 'subjects.name as subject', 'semesters.name as semester', 'exams.name as exam', 'exam_types.name as examType')
-            ->get();
-
-        $results = [];
-        foreach ($semesterExamsData as  $key => $sed) {
-            foreach ($response as  $value) {
-                if($key == $value->semester)
-                {
-                    foreach ($sed as $data) {
-                        $results[$key][$value->subject][$data['exam'] . ' ' . $data['examType']] = "";
-                    }
-                }
-            }
-        }
-        foreach ($semesterExamsData as  $key => $sed) {
-            foreach ($response as  $value) {
-                foreach ($sed as $data) {
-                    if ($data['exam'] == $value->exam && $data['examType'] == $value->examType && $key == $value->semester) {
-                        $results[$value->semester][$value->subject][$data['exam'] . ' ' . $data['examType']] = $value->grade;
-                    }
-                }
-            }
-        }
-
-        return view($this->view.'details.result.index', compact('student', 'results', 'semesterExamsData'));
+        $pdf = Pdf::loadView($this->view.'details.result.pdf.transcript', compact('exams', 'data', 'student'));
+        return $pdf->stream('transcript-'.$student->user->name.'.pdf');
     }
 
     /**
@@ -190,6 +177,7 @@ class StudentController extends Controller
      */
     public function storeImport(Request $request){
         $file = $request->file('file');
+        set_time_limit(300);
         Excel::import(new UsersImport, $file);
 
         return $this->studentService->redirect('admin.student.index', 'success', 'Student imported successfully');

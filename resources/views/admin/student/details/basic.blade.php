@@ -49,8 +49,8 @@
                             <div class="col-lg-5">
                             </div>
                             <div class="col-lg-6">
-                                <button type="button" class="btn btn-primary ">Back</button>&nbsp;
-                                <button type="button" class="btn btn-success ">Semesters</button>
+                                <a href="{{ url()->previous() }}" type="button" class="btn btn-primary ">Back</a>&nbsp;
+                                <a href="{{ route('admin.student.semester', $student->id) }}" type="button" class="btn btn-success ">Semesters</a>
                             </div>
                         </div>
                     </div>

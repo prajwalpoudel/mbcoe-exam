@@ -19,6 +19,10 @@
                     <a href="{{ route('admin.subject.create') }}" class="btn btn-success btn-pill btn-sm">
                         Create
                     </a>
+                    <a href="{{ route('admin.subject.import') }}" class="btn btn-primary btn-pill btn-sm">
+                        <i class="la la-upload"></i>
+                        Import
+                    </a>
                 </div>
             </div>
         </div>

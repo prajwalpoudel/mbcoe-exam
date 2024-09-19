@@ -48,6 +48,15 @@
             @enderror
         </div>
     </div>
+    <div class="form-group row validated">
+        <div class="col-lg-6">
+            {{ html()->label('Is Elective ?') }}
+            {{ html()->text('is_elective')->class($errors->has('is_elective') ? 'form-control is-invalid' : 'form-control') }}
+            @error('is_elective')
+            <div id="" class="error invalid-feedback"> {{ $message }}</div>
+            @enderror
+        </div>
+    </div>
 </div>
 
 <div class="kt-portlet__foot">
