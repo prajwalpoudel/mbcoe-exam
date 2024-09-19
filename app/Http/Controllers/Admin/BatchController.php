@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\StatusConstant;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BatchRequest;
 use App\Services\BatchService;
+use App\Services\FacultyService;
+use App\Services\SemesterService;
 use App\Services\SyllabusService;
 use Illuminate\Http\Request;
 
@@ -22,19 +25,33 @@ class BatchController extends Controller
      * @var SyllabusService
      */
     private $syllabusService;
+    /**
+     * @var FacultyService
+     */
+    private $facultyService;
+    /**
+     * @var SemesterService
+     */
+    private $semesterService;
 
     /**
      * BatchController constructor.
      * @param BatchService $batchService
      * @param SyllabusService $syllabusService
+     * @param FacultyService $facultyService
+     * @param SemesterService $semesterService
      */
     public function __construct(
         BatchService $batchService,
-        SyllabusService $syllabusService
+        SyllabusService $syllabusService,
+        FacultyService $facultyService,
+        SemesterService $semesterService
     )
     {
         $this->batchService = $batchService;
         $this->syllabusService = $syllabusService;
+        $this->facultyService = $facultyService;
+        $this->semesterService = $semesterService;
     }
 
     /**
@@ -73,7 +90,10 @@ class BatchController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $batch = $this->batchService->find($id)->load(['syllabus', 'students']);
+        $faculties = $this->facultyService->all()->pluck('name', 'id');
+        $semesters = $this->semesterService->query()->where('status', StatusConstant::RUNNING)->groupBy('name')->orderBy('id')->pluck('name', 'name');
+        return view($this->view.'show', compact('batch', 'faculties', 'semesters'));
     }
 
     /**
@@ -105,5 +125,9 @@ class BatchController extends Controller
         $this->batchService->destroy($id);
 
         return redirect()->back();
+    }
+
+    public function result(Request $request) {
+        return $this->batchService->result($request);
     }
 }

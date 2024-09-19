@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code');
             $table->integer('credit_hour');
+            $table->boolean('is_elective')->default(false);
             $table->foreignId('syllabus_id')->constrained('syllabi')->onDelete('cascade')->nullable();
             $table->foreignId('faculty_id')->constrained('faculties')->onDelete('cascade')->nullable();
             $table->foreignId('semester_id')->constrained('semesters')->onDelete('cascade')->nullable();
