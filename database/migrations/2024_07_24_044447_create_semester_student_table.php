@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('semester_id')->constrained('semesters')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('student_id')->constrained('students')->onDelete('cascade')->onUpdate('cascade');
             $table->boolean('is_current')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

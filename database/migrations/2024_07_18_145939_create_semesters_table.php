@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('no_of_elective')->default(0);
             $table->enum('status', [StatusConstant::RUNNING, StatusConstant::PASSOUT])->default(StatusConstant::RUNNING);
             $table->foreignId('faculty_id')->constrained('faculties')->onDelete('cascade')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

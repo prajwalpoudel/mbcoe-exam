@@ -61,9 +61,9 @@
             columns: [
                 {data: 'DT_RowIndex', searchable: false, orderable: false, width: '5%'},
                 {data: 'name', name: 'name'},
-                {data: 'faculty.name', name: 'faculty.name'},
-                {data: 'semester.name', name: 'semester.name'},
-                {data: 'syllabus.name', name: 'syllabus.name'},
+                {data: 'faculty', name: 'faculties.name'},
+                {data: 'semester', name: 'semesters.name'},
+                {data: 'syllabus', name: 'syllabi.name'},
                 {data: 'code', name: 'code'},
                 {data: 'credit_hour', name: 'credit_hour'},
                 {data: 'action', 'name': 'action', searchable: false, orderable: false, className: 'dt-body-center'}

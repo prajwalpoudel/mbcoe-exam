@@ -204,6 +204,11 @@ class MenuTableSeeder extends Seeder
                     'admin.student.index',
                     'admin.student.create',
                     'admin.student.edit',
+                    'admin.student.show',
+                    'admin.student.import',
+                    'admin.student.semester',
+                    'admin.student.result',
+                    'admin.student.transcript',
                 ]
             ],
             [
@@ -221,8 +226,29 @@ class MenuTableSeeder extends Seeder
                     'admin.result.index',
                     'admin.result.create',
                     'admin.result.edit',
+                    'admin.result.show',
+                    'admin.result.import',
+                    'admin.result.export',
                 ]
             ],
+            [
+                "title" => "Settings",
+                "class" => "nav-item",
+                "order" => 1,
+                "icon" => "fa fa-envelope",
+                "is_active" => true,
+                "route" => "admin.setting.index",
+                "group_id" => MenuGroupConstant::ADMIN_ID,
+                "children" => [
+
+                ],
+                "related_routes" => [
+                    'admin.setting.index',
+                    'admin.setting.create',
+                    'admin.setting.edit',
+                ]
+            ],
+
         ];
 
         $groups = [

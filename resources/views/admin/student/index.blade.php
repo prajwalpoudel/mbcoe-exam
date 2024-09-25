@@ -111,14 +111,14 @@
             order: [[1, 'asc']],
             columns: [
                 {data: 'DT_RowIndex', searchable: false, orderable: false, width: '5%'},
-                {data: 'name', name: 'name'},
-                {data: 'email', name: 'email'},
-                {data: 'address', name: 'address'},
-                {data: 'phone', name: 'phone'},
+                {data: 'name', name: 'users.name'},
+                {data: 'email', name: 'users.email'},
+                {data: 'address', name: 'users.address'},
+                {data: 'phone', name: 'users.phone'},
                 {data: 'symbol_no', name: 'symbol_no'},
                 {data: 'registration_number', name: 'registration_number'},
-                {data: 'faculty', name: 'faculty'},
-                {data: 'semester', name: 'semester'},
+                {data: 'faculty', name: 'faculties.name'},
+                {data: 'semester', name: 'semesters.name'},
                 {data: 'action', 'name': 'action', searchable: false, orderable: false, className: 'dt-body-center'}
             ],
         });

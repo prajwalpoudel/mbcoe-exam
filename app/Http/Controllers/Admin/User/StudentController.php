@@ -2,22 +2,19 @@
 
 namespace App\Http\Controllers\Admin\User;
 
-use App\Constants\StatusConstant;
+use App\Constants\RoleConstant;
 use App\Exports\StudentSampleExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StudentRequest;
 use App\Imports\UsersImport;
-use App\Models\Result;
-use App\Models\Subject;
 use App\Services\BatchService;
 use App\Services\FacultyService;
 use App\Services\SemesterService;
 use App\Services\StudentService;
+use App\Services\UserService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
@@ -42,6 +39,10 @@ class StudentController extends Controller
      * @var SemesterService
      */
     private $semesterService;
+    /**
+     * @var UserService
+     */
+    private $userService;
 
     /**
      * StudentController constructor.
@@ -49,18 +50,21 @@ class StudentController extends Controller
      * @param FacultyService $facultyService
      * @param BatchService $batchService
      * @param SemesterService $semesterService
+     * @param UserService $userService
      */
     public function __construct(
         StudentService $studentService,
         FacultyService $facultyService,
         BatchService $batchService,
-        SemesterService $semesterService
+        SemesterService $semesterService,
+        UserService $userService
     )
     {
         $this->studentService = $studentService;
         $this->facultyService = $facultyService;
         $this->batchService = $batchService;
         $this->semesterService = $semesterService;
+        $this->userService = $userService;
     }
 
     /**
@@ -95,8 +99,20 @@ class StudentController extends Controller
      */
     public function store(StudentRequest $request)
     {
-        dd($request->all());
-        $this->studentService->create($request->all());
+        $userData = $request->input('user');
+        $userData['role_id'] = RoleConstant::STUDENT_ID;
+        $studentData = $request->except('user');
+        $semester = $this->semesterService->find($request->input('semester_id'));
+        $semesters = $this->semesterService->query()
+            ->where('faculty_id', $request->input('faculty_id'))
+            ->where('order', '<', $semester->order)->pluck('id');
+        foreach($semesters as $sem) {
+            $semestersData[$sem] = ['is_current' => false];
+        }
+        $semestersData[$semester->id] = ['is_current' => true];
+        $user = $this->userService->create($userData);
+        $student = $user->student()->create($studentData);
+        $student->semesters()->sync($semestersData);
 
         return $this->studentService->redirect('admin.student.index', 'success', 'Student created successfully');
     }
@@ -133,6 +149,10 @@ class StudentController extends Controller
         return view($this->view.'details.result.index', compact('student', 'data', 'exams'));
     }
 
+    /**
+     * @param string $id
+     * @return \Illuminate\Http\Response
+     */
     public function transcript(string $id) {
         $response = $this->studentService->result($id);
         $student = $response['student'];
@@ -150,8 +170,9 @@ class StudentController extends Controller
     {
         $student = $this->studentService->find($id);
         $faculties = $this->facultyService->allForDropDown();
+        $batches = $this->batchService->allForDropDown();
 
-        return view($this->view.'edit', compact('student', 'faculties'));
+        return view($this->view.'edit', compact('student', 'faculties', 'batches'));
     }
 
     /**
@@ -159,9 +180,23 @@ class StudentController extends Controller
      */
     public function update(StudentRequest $request, string $id)
     {
-        $this->facultyService->update($id, $request->all());
+        $student = $this->studentService->find($id);
+        $userData = $request->input('user');
+        $studentData = $request->except('user');
+        $semester = $this->semesterService->find($request->input('semester_id'));
+        $semesters = $this->semesterService->query()
+            ->where('faculty_id', $request->input('faculty_id'))
+            ->where('order', '<', $semester->order)->pluck('id');
+        foreach($semesters as $sem) {
+            $semestersData[$sem] = ['is_current' => false];
+        }
+        $semestersData[$semester->id] = ['is_current' => true];
 
-        return $this->facultyService->redirect('admin.student.index', 'success', 'Student updated successfully');
+        $student->update($studentData);
+        $student->user()->update($userData);
+        $student->semesters()->sync($semestersData);
+
+        return $this->studentService->redirect('admin.student.index', 'success', 'Student created successfully');
     }
 
     /**
@@ -192,8 +227,11 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->studentService->destroy($id);
+        $student = $this->studentService->find($id);
+        $student->user()->delete();
+        $student->semesters()->delete();
+        $student->delete();
 
-        return redirect()->back();
+        return $this->studentService->redirect('admin.student.index', 'success', 'Student deleted successfully.');
     }
 }

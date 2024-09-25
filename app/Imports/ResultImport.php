@@ -33,6 +33,7 @@ class ResultImport implements ToModel, WithHeadingRow, WithValidation
             ->where('faculty_id', $this->data['faculty_id'])
             ->where('semester_id', $this->data['semester_id'])->get();
         foreach ($subjects as $subject) {
+//            dd(getStrAsRow($subjects[5]->name));
             if(array_key_exists(getStrAsRow($subject->name), $row) && isset($student)) {
                 $resultData = [
                     'grade' => $row[getStrAsRow($subject->name)],

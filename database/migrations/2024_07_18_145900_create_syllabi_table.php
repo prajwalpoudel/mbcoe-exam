@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->date('updated_on')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

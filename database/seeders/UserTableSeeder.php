@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Constants\RoleConstant;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -32,49 +33,19 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $students = [
+        $users = [
             [
-                'name' => 'Aditya Pokhrel',
-                'role_id' => 2,
-                'student' => [
-                    'symbol_no' => '21075184',
-                    'registration_number' => '2021-1-07-0689',
-                    'admitted_year' => Carbon::now(),
-                    'batch_id' => 4,
-                    'faculty_id' => 2,
-                    'semester' => [
-                        [
-                            'semester_id'=> 9,
-                        ],
-                        [
-                            'semester_id'=> 10,
-                        ],
-                        [
-                            'semester_id'=> 11,
-                        ],
-                        [
-                            'semester_id'=> 12,
-                        ],
-                        [
-                            'semester_id'=> 13,
-                        ]
-                    ]
-                ]
+                'name' => 'Admin Admin',
+                'email' => 'admin@admin.com',
+                'password' => bcrypt('password'),
+                'role_id' => RoleConstant::ADMIN_ID,
             ]
         ];
 
         DB::table('users')->truncate();
-        DB::table('students')->truncate();
-        DB::table('semester_student')->truncate();
-        foreach($students as $student) {
-            $userData = Arr::except($student, ['student']);
-            $studentData = $student['student'];
-            $semesterDatas = $studentData['semester'];
-            unset($studentData['semester']);
+        foreach($users as $user) {
             DB::beginTransaction();
-            $user = $this->userService->create($userData);
-            $student = $user->student()->create($studentData);
-            $student->semesters()->attach($semesterDatas);
+            $user = $this->userService->create($user);
             DB::commit();
         }
     }

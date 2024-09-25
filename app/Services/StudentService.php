@@ -75,7 +75,7 @@ class StudentService extends BaseService
     public function result(string $id) {
         $student = $this->find($id)->load('batch', 'user');
         $student = $student->load(['semesters' => function($query) {
-            return $query->wherePivot('is_current', false)->orderBy('order');
+            return $query->wherePivot('is_current', false)->orderBy('order', 'asc');
         }, 'semesters.subjects' => function($query) use($student) {
             return $query->where('syllabus_id', $student->batch->syllabus_id);
         }]);
@@ -83,31 +83,47 @@ class StudentService extends BaseService
             ->join('subjects', 'subjects.id', '=', 'subject_id')
             ->join('semesters', 'subjects.semester_id', '=', 'semesters.id')
             ->join('exams', 'results.exam_id', '=', 'exams.id')
-            ->join('exam_types', 'exams.exam_type_id', '=', 'exam_types.id');
+            ->join('exam_types', 'exams.exam_type_id', '=', 'exam_types.id')
+            ->whereNull('results.deleted_at');
 
-        $exams = (clone $resultResponse)->select('exams.name as exam', 'exam_types.name as examType', 'semesters.name as semester')
+        $exams = (clone $resultResponse)->select('exams.name as exam', 'exam_types.name as examType', 'semesters.display_name as semester')
             ->groupBy('exam', 'examType', 'semester')->orderBy('exam')->orderBy('examType')->get();
-        $results = (clone $resultResponse)->select('exams.name as exam', 'exam_types.name as examType', 'semesters.name as semester', 'subjects.name as subject', 'grade')
+        $results = (clone $resultResponse)->select('exams.name as exam', 'exam_types.name as examType', 'semesters.display_name as semester', 'subjects.name as subject', 'grade')
             ->orderBy('exam')->orderBy('examType')
             ->get();
 
+
         $data = [];
         foreach($student->semesters as $semester) {
+            for($i = 0; $i < $semester->no_of_elective; $i++) {
+                $data[$semester->display_name]['Elective ' . $i + 1][] = '';
+            }
+        }
+        foreach($student->semesters as $semester) {
+            $electiveCount = 0;
             foreach($semester->subjects as $subject) {
                 foreach($results as $result) {
-                    if($result->semester == $semester->name ) {
+                    if($result->semester == $semester->display_name ) {
                         if($subject->name == $result->subject) {
-                            $data[$semester->name][$subject->name][$result->exam.' '.$result->examType] = $result->grade;
+                            if($subject->is_elective) {
+                                $electiveCount++;
+                                unset($data[$semester->display_name]['Elective '.$electiveCount ]);
+                            }
+                            $data[$semester->display_name][$subject->name][$result->exam.' '.$result->examType] = $result->grade;
                         }
                         else {
-                            if(!isset($data[$semester->name][$subject->name][$result->exam.' '.$result->examType])) {
-                                $data[$semester->name][$subject->name][$result->exam.' '.$result->examType] = "";
+                            if(!isset($data[$semester->display_name][$subject->name][$result->exam.' '.$result->examType])) {
+                                if(!$subject->is_elective ) {
+                                    $data[$semester->display_name][$subject->name][$result->exam.' '.$result->examType] = "";
+                                }
                             }
                         }
                     }
                 }
             }
         }
+        ksort($data);
+
         $response = [
             'student' => $student,
             'data' => $data,

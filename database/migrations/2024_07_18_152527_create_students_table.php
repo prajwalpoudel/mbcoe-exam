@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('admitted_year')->nullable();
             $table->foreignId('batch_id')->constrained('batches')->onDelete('cascade');
             $table->foreignId('faculty_id')->constrained('faculties')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
