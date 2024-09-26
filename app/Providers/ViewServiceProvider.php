@@ -24,6 +24,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         View::composer(['admin.*'], MenuComposer::class);
         View::composer(['admin.*'], SettingsComposer::class);
+        View::composer(['auth.*'], SettingsComposer::class);
 
     }
 }
