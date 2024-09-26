@@ -56,7 +56,7 @@
             </div>
             <div class="row mt-4">
                 <div class="col-lg-12">
-                    <table class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer" width="100%" id="student-table">
+                    <table class="table table-striped table-bordered table-hover table-responsive table-checkable order-column dataTable no-footer" width="100%" id="student-table">
                 <thead>
                 <tr>
                     <th>#</th>

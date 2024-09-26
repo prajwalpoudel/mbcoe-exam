@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="kt-portlet__body">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped table-responsive">
                     <thead>
                     <tr>
                         <th>Name</th>
