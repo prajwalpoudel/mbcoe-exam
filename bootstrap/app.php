@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -16,7 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
         }
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->redirectGuestsTo('/');
+        $middleware->alias([
+            'authenticated' => \App\Http\Middleware\RedirectAuthenticatedUsers::class,
+            \Illuminate\Auth\Middleware\Authenticate::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
