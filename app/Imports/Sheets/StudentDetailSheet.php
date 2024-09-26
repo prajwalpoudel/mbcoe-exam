@@ -8,7 +8,10 @@ use App\Models\Semester;
 use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\HasReferencesToOtherSheets;
 use Maatwebsite\Excel\Concerns\PersistRelations;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -17,7 +20,7 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class StudentDetailSheet implements ToModel, PersistRelations, WithValidation, WithHeadingRow, WithChunkReading, WithCalculatedFormulas
+class StudentDetailSheet implements ToModel, PersistRelations, WithValidation, WithHeadingRow, WithCalculatedFormulas
 {
     use RemembersRowNumber;
     /**
@@ -51,6 +54,8 @@ class StudentDetailSheet implements ToModel, PersistRelations, WithValidation, W
             $semestersData[$sem] = ['is_current' => false];
         }
         $semestersData[$semester->id] = ['is_current' => true];
+        DB::connection()->disableQueryLog();
+        DB::beginTransaction();
         if($student) {
             $student->update($studentData);
             $student->user()->update($userData);
@@ -61,6 +66,8 @@ class StudentDetailSheet implements ToModel, PersistRelations, WithValidation, W
             $student = $user->student()->create($studentData);
             $student->semesters()->sync($semestersData);
         }
+        DB::commit();
+        DB::connection()->enableQueryLog();
     }
 
     public function rules(): array
@@ -73,10 +80,5 @@ class StudentDetailSheet implements ToModel, PersistRelations, WithValidation, W
             'faculty_id' => 'required',
             'semester_id' => 'required',
         ];
-    }
-
-    public function chunkSize(): int
-    {
-        return 100;
     }
 }

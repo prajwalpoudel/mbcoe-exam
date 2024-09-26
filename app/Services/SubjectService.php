@@ -39,8 +39,13 @@ class SubjectService extends BaseService
      */
     public function datatable(Request $request)
     {
-        $subjects = $this->query()->with(['faculty', 'semester', 'syllabus'])->get();
-        return $this->dataTables->of($subjects)
+        $subjects = $this->query()
+            ->join('faculties', 'faculties.id', '=', 'subjects.faculty_id')
+            ->join('semesters', 'semesters.id', '=', 'subjects.semester_id')
+            ->join('syllabi', 'syllabi.id', '=', 'subjects.syllabus_id')
+            ->select('subjects.id as id','subjects.name as name', 'subjects.code as code', 'faculties.name as faculty', 'semesters.name as semester', 'syllabi.name as syllabus', 'credit_hour');
+
+        return DataTables::of($subjects)
             ->addColumn('action', function ($subject) {
                 $params = [
                     'route' => 'admin.subject',

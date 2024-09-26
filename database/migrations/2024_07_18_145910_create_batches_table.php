@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('syllabus_id')->constrained('syllabi')->onDelete('cascade')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

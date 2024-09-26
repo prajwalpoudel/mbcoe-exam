@@ -15,6 +15,14 @@
             text-align: center;
             line-height: 0.4;
         }
+        .title img {
+            position: absolute;
+            left: 130px;
+        }
+        .title div {
+            position: absolute;
+            right: 130px;
+        }
 
         .student-details {
             line-height: 0.4;
@@ -22,18 +30,18 @@
 
         .student-details .col1 {
             position: absolute;
-            top: 60px;
+            top: 80px;
             left: 0px;
         }
 
         .student-details .col2 {
             position: absolute;
-            top: 60px;
+            top: 80px;
             right: 0px;
         }
 
         .document-name {
-            margin-top: 30px;
+            margin-top: 130px;
             text-decoration: underline;
             text-align: center;
         }
@@ -60,8 +68,11 @@
 </head>
 <body>
 <div class="title">
-    <h3>Madan Bhandari Memorial Academy Nepal</h3>
-    <h4>Urlabari-03, Morang</h4>
+    <img style="width: 80px; height:80px;" src="{{ public_path('storage/'). $setting->logo }}" alt="">
+    <div>
+        <h3>Madan Bhandari Memorial Academy Nepal</h3>
+        <h4>Urlabari-03, Morang</h4>
+    </div>
 </div>
 
 <div class="student-details">

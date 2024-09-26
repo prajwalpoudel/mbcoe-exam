@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('exam_types', function (Blueprint $table) {
             $table->id();
             $table->enum('name', ['Spring', 'Fall', 'Internal']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

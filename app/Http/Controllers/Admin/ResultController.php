@@ -8,10 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StudentRequest;
 use App\Imports\ResultImport;
 use App\Imports\UsersImport;
+use App\Models\Faculty;
 use App\Services\BatchService;
 use App\Services\ExamService;
 use App\Services\FacultyService;
 use App\Services\ResultService;
+use App\Services\SemesterService;
 use App\Services\SyllabusService;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
@@ -40,6 +42,10 @@ class ResultController extends Controller
      * @var SyllabusService
      */
     private $syllabusService;
+    /**
+     * @var SemesterService
+     */
+    private $semesterService;
 
     /**
      * ResultController constructor.
@@ -47,18 +53,21 @@ class ResultController extends Controller
      * @param ExamService $examService
      * @param FacultyService $facultyService
      * @param SyllabusService $syllabusService
+     * @param SemesterService $semesterService
      */
     public function __construct(
         ResultService $resultService,
         ExamService $examService,
         FacultyService $facultyService,
-        SyllabusService $syllabusService
+        SyllabusService $syllabusService,
+        SemesterService $semesterService
     )
     {
         $this->resultService = $resultService;
         $this->examService = $examService;
         $this->facultyService = $facultyService;
         $this->syllabusService = $syllabusService;
+        $this->semesterService = $semesterService;
     }
 
     /**
@@ -115,6 +124,8 @@ class ResultController extends Controller
      * @return BinaryFileResponse
      */
     public function exportSample(Request $request) {
-        return Excel::download(new ResultExport($request->all()), 'result.xlsx');
+        $semester = $this->semesterService->find($request->input('semester_id'))->name;
+        $faculty = $this->facultyService->find($request->input('faculty_id'))->name;
+        return Excel::download(new ResultExport($request->all()), 'result'.$faculty.'-'.$semester.'.xlsx');
     }
 }

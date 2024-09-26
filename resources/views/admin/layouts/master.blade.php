@@ -48,6 +48,7 @@
 
     <!--end::Layout Skins -->
     <link rel="shortcut icon" href="{{ asset('assets/admin/icons') }}/favicon.ico" />
+    @stack('style')
 </head>
 
 <!-- end::Head -->

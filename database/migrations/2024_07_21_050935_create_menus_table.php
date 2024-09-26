@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('is_active');
             $table->integer('order');
             $table->text('related_routes')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

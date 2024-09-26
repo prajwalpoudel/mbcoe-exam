@@ -6,9 +6,9 @@
     <!-- begin:: Aside -->
     <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
         <div class="kt-aside__brand-logo">
-            <a href="{{ route('admin.dashboard') }}">
-                MBCOE Exam
-{{--                <img class="img-logo" src="" alt="" height="60px" width="150px">--}}
+            <a href="{{ route('admin.dashboard') }}" style="color:white; font-size:18px;">
+                <img class="img-logo" src="{{ getImageUrl($setting->logo) }}" alt="" height="30px" width="30px">
+                {{ $setting->site_name }}
             </a>
         </div>
         <div class="kt-aside__brand-tools">

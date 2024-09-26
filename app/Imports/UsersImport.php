@@ -6,6 +6,7 @@ use App\Exports\Sheets\BatchSheet;
 use App\Imports\Sheets\FacultySheet;
 use App\Imports\Sheets\SemesterSheet;
 use App\Imports\Sheets\StudentDetailSheet;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 
