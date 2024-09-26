@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="kt-portlet__body">
-            <table class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer" width="100%" id="subject-table">
+            <table class="table table-striped table-bordered table-hover table-responsive table-checkable order-column dataTable no-footer" width="100%" id="subject-table">
                 <thead>
                 <tr>
                     <th>#</th>

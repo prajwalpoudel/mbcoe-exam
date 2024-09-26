@@ -4,7 +4,10 @@
 @endsection
 
 @section('content')
-    <div class="kt-login__container">
+    <div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v4 kt-login--signin" id="kt_login">
+        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+            <div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
+                <div class="kt-login__container">
         <div class="kt-login__logo">
             <a href="#">
                 <img src="{{ getImageUrl($setting->logo) }}" height="100" width="100">
@@ -52,6 +55,9 @@
                     <button id="kt_login_forgot_cancel" class="btn btn-secondary btn-pill kt-login__btn-secondary">Cancel</button>
                 </div>
             </form>
+        </div>
+    </div>
+            </div>
         </div>
     </div>
 @endsection

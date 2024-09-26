@@ -28,6 +28,7 @@
 
     <!--begin::Page Custom Styles(used by this page) -->
     <link href="{{ asset('assets/admin/css') }}/login.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/admin/css') }}/error.css" rel="stylesheet" type="text/css" />
     <!--end::Page Custom Styles -->
 
     <!--begin:: Global Mandatory Vendors -->
@@ -64,13 +65,7 @@
 
 <!-- begin:: Page -->
 <div class="kt-grid kt-grid--ver kt-grid--root">
-    <div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v4 kt-login--signin" id="kt_login">
-        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
-            <div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
-                @yield('content')
-            </div>
-        </div>
-    </div>
+    @yield('content')
 </div>
 
 <!-- end:: Page -->
