@@ -106,6 +106,7 @@ class ResultController extends Controller
         $data = $request->only(['exam_id', 'syllabus_id', 'faculty_id', 'semester_id']);
         Excel::import(new ResultImport($data), $file);
 
+
         return $this->resultService->redirect('admin.result.index', 'success', 'Result imported successfully');
     }
 

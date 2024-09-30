@@ -27,7 +27,45 @@
             </div>
         </div>
         <div class="kt-portlet__body">
-            <table class="table table-striped table-bordered table-hover table-responsive table-checkable order-column dataTable no-footer" width="100%" id="subject-table">
+            <div class="row align-items-center">
+                <div class="col-xl-12 order-2 order-xl-1">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Faculty:</label>
+                                </div>
+                                <div class="kt-form__control">
+                                    {{ html()->select('faculty_id', $faculties, null)->id('faculty')->class($errors->has('faculty_id') ? 'form-control is-invalid bootstrap-select' : 'form-control bootstrap-select')  }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Semester :</label>
+                                    {{ html()->select('semester_id', $semesters, null)->id('semester')->class($errors->has('semester_id') ? 'form-control is-invalid bootstrap-select' : 'form-control bootstrap-select')  }}
+                                </div>
+                                <div class="kt-form__control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 kt-margin-b-20-tablet-and-mobile">
+                            <div class="kt-form__group kt-form__group--inline">
+                                <div class="kt-form__label">
+                                    <label>Syllabus :</label>
+                                    {{ html()->select('syllabus_id', $syllabi, null)->id('syllabus')->class($errors->has('syllabus_id') ? 'form-control is-invalid bootstrap-select' : 'form-control bootstrap-select')  }}
+                                </div>
+                                <div class="kt-form__control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-lg-12">
+                    <table class="table table-striped table-bordered table-hover table-responsive table-checkable order-column dataTable no-footer" width="100%" id="subject-table">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -41,6 +79,8 @@
                 </tr>
                 </thead>
             </table>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -56,6 +96,11 @@
             stateSave: true,
             ajax: {
                 url: url,
+                data: function (d) {
+                        d.faculty = $('#faculty').val(),
+                        d.semester = $('#semester').val(),
+                        d.syllabus = $('#syllabus').val()
+                },
             },
             order: [[1, 'asc']],
             columns: [
@@ -68,6 +113,18 @@
                 {data: 'credit_hour', name: 'credit_hour'},
                 {data: 'action', 'name': 'action', searchable: false, orderable: false, className: 'dt-body-center'}
             ],
+        });
+        $(document).ready(function() {
+            $('#faculty').change(function () {
+                subjectTable.draw();
+            });
+            $('#semester').change(function () {
+                subjectTable.draw();
+            });
+            $('#syllabus').change(function () {
+                subjectTable.draw();
+            });
+
         });
     </script>
 @endpush

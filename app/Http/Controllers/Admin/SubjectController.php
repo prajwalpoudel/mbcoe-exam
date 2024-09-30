@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SubjectRequest;
 use App\Imports\SubjectImport;
 use App\Services\FacultyService;
+use App\Services\SemesterService;
 use App\Services\SubjectService;
 use App\Services\SyllabusService;
 use Illuminate\Container\Container;
@@ -31,22 +32,29 @@ class SubjectController extends Controller
      * @var SyllabusService
      */
     private $syllabusService;
+    /**
+     * @var SemesterService
+     */
+    private $semesterService;
 
     /**
      * SubjectController constructor.
      * @param SubjectService $subjectService
      * @param FacultyService $facultyService
      * @param SyllabusService $syllabusService
+     * @param SemesterService $semesterService
      */
     public function __construct(
         SubjectService $subjectService,
         FacultyService $facultyService,
-        SyllabusService $syllabusService
+        SyllabusService $syllabusService,
+        SemesterService $semesterService
     )
     {
         $this->subjectService = $subjectService;
         $this->facultyService = $facultyService;
         $this->syllabusService = $syllabusService;
+        $this->semesterService = $semesterService;
     }
 
     /**
@@ -57,7 +65,11 @@ class SubjectController extends Controller
         if ($request->wantsJson()) {
             return $this->subjectService->datatable($request);
         }
-        return view($this->view . 'index');
+        $faculties = $this->facultyService->all()->pluck('name', 'id')->prepend('All', null);
+        $semesters = $this->semesterService->query()->groupBy('name')->orderBy('id')->pluck('name', 'name')->prepend('All', null);
+        $syllabi = $this->syllabusService->all()->pluck('name', 'id')->prepend('All', null);
+
+        return view($this->view . 'index', compact('faculties', 'semesters', 'syllabi'));
     }
 
     /**

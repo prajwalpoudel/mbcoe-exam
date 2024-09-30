@@ -26,7 +26,8 @@ class SemesterRequest extends FormRequest
             'name' => 'required',
             'display_name' => 'required',
             'code' => 'required',
-            'faculty_id' => 'required'
+            'faculty_id' => 'required',
+            'order' => 'required'
         ];
     }
 }

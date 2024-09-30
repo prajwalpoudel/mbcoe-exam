@@ -44,10 +44,12 @@ class ResultService extends BaseService
         $results = DB::table('results')
             ->join('students', 'results.student_id', '=', 'students.id')
             ->join('faculties', 'students.faculty_id', '=', 'faculties.id')
+            ->join('subjects', 'results.subject_id', '=', 'subjects.id')
+            ->join('semesters', 'subjects.semester_id', '=', 'semesters.id')
             ->join('exams', 'results.exam_id', '=', 'exams.id')
             ->join('exam_types', 'exams.exam_type_id', '=', 'exam_types.id')
-            ->select('results.id as id', 'faculties.name as faculty', 'exams.name as exam', 'exam_types.name as exam_type', DB::raw('count(*) as result_count'))
-            ->groupBy('faculty', 'exam', 'exam_type')->get();
+            ->select('results.id as id', 'faculties.name as faculty', 'semesters.name as semester', 'exams.name as exam', 'exam_types.name as exam_type', DB::raw('count(*) as result_count'))
+            ->groupBy('faculty', 'semester', 'exam', 'exam_type')->get();
 
         return $this->dataTables->of($results)
             ->addColumn('action', function ($result) {

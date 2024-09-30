@@ -30,19 +30,18 @@ class StudentImportSampleSheet implements FromCollection, WithHeadings, WithEven
 
     public function __construct()
     {
-        $this->row_count = 10;
+        $this->row_count = 100;
         $batches = Batch::pluck('name', 'id')->toArray();
         $this->bCount = count($batches) ?? 0;
         $faculties = Faculty::pluck('name', 'id')->toArray();
         $this->fCount = count($faculties) ?? 0;
         $semesters = Semester::groupBy('name')->orderBy('order')->pluck('name', 'id')->toArray();
-        $this->sCount = count($semesters) ?? 0;
+        $this->sCount = count(Semester::all()) ?? 0;
         $selects = [  //selects should have column_name and options
             ['columns_name' => 'H', 'options' => $batches],
             ['columns_name' => 'J', 'options' => $faculties], //Column D has heading departments. See headings() method below
             ['columns_name' => 'L', 'options' => $semesters],
         ];
-
         $this->selects = $selects;
     }
 

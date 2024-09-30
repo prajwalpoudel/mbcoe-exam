@@ -31,6 +31,7 @@
                     <th>Exam Year</th>
                     <th>Exam Type</th>
                     <th>Faculty</th>
+                    <th>Semester</th>
                     <th>Appearence</th>
                     <th style="text-align: center">Actions</th>
                 </tr>
@@ -58,6 +59,7 @@
                 {data: 'exam', name: 'exam'},
                 {data: 'exam_type', name: 'exam_type'},
                 {data: 'faculty', name: 'faculty'},
+                {data: 'semester', name: 'semester'},
                 {data: 'result_count', name: 'result_count'},
                 {data: 'action', 'name': 'action', searchable: false, orderable: false, className: 'dt-body-center'}
             ],
