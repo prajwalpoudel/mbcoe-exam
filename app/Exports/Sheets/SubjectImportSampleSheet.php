@@ -24,7 +24,7 @@ class SubjectImportSampleSheet implements FromCollection, WithHeadings, WithEven
 
     public function __construct()
     {
-        $this->row_count = 10;
+        $this->row_count = 100;
         $faculties = Faculty::pluck('name', 'id')->toArray();
         $this->fCount = count($faculties) ?? 0;
         $syllabus = Syllabus::pluck('name', 'id')->toArray();

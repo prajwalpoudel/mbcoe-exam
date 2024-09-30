@@ -35,8 +35,15 @@
 
     <div class="form-group row validated">
         <div class="col-lg-6">
+            {{ html()->label('Order') }}
+            {{ html()->text('order')->class($errors->has('order') ? 'form-control is-invalid' : 'form-control') }}
+            @error('order')
+            <div id="" class="error invalid-feedback"> {{ $message }}</div>
+            @enderror
+        </div>
+        <div class="col-lg-6">
             {{ html()->label('Number of Elective Subject') }}
-            {{ html()->number('no_of_elective')->class($errors->has('no_of_elective') ? 'form-control is-invalid' : 'form-control') }}
+            {{ html()->number('no_of_elective', $semester ?? 0)->class($errors->has('no_of_elective') ? 'form-control is-invalid' : 'form-control') }}
             @error('no_of_elective')
             <div id="" class="error invalid-feedback"> {{ $message }}</div>
             @enderror

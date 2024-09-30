@@ -45,6 +45,15 @@ class SubjectService extends BaseService
             ->join('syllabi', 'syllabi.id', '=', 'subjects.syllabus_id')
             ->select('subjects.id as id','subjects.name as name', 'subjects.code as code', 'faculties.name as faculty', 'semesters.name as semester', 'syllabi.name as syllabus', 'credit_hour');
 
+        if($facultyId = $request->faculty) {
+            $subjects->where('faculties.id', $facultyId);
+        }
+        if($semester = $request->semester) {
+            $subjects->where('semesters.name', $semester);
+        }
+        if($syllabus = $request->syllabus) {
+            $subjects->where('syllabi.id', $syllabus);
+        }
         return DataTables::of($subjects)
             ->addColumn('action', function ($subject) {
                 $params = [
