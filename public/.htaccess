@@ -18,4 +18,8 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+    <IfModule mime_module>
+      AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+    </IfModule>
 </IfModule>
+# php -- END cPanel-generated handler, do not edit
