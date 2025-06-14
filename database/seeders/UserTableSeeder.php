@@ -36,8 +36,8 @@ class UserTableSeeder extends Seeder
         $users = [
             [
                 'name' => 'Admin Admin',
-                'email' => 'admin@admin.com',
-                'password' => bcrypt('password'),
+                'email' => 'examcoe@mbman.edu.np',
+                'password' => bcrypt('mbcoe@exam'),
                 'role_id' => RoleConstant::ADMIN_ID,
             ]
         ];

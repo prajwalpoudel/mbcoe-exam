@@ -77,6 +77,7 @@ class StudentDetailSheet implements ToModel, PersistRelations, WithValidation, W
             'symbol_no' => 'required',
             'registration_number' => 'required',
             'batch_id' => 'required',
+            'admitted_year' => 'required',
             'faculty_id' => 'required',
             'semester_id' => 'required',
         ];

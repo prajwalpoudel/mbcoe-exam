@@ -20,3 +20,5 @@ function getImageUrl($image = null) {
         return Storage::url($image) ?? null;
     }
 }
+
+

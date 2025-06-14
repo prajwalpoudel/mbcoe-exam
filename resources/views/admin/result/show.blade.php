@@ -11,7 +11,7 @@
                 {{--                    <i class="flaticon-calendar"></i>--}}
                 {{--                </span>--}}
                 <h3 class="kt-portlet__head-title kt-font-primary">
-                    Result Listing
+                    Result Listing: {{ ($result->exam->exam_name ?? null).' '.($result->student->faculty->name ?? null).' '.($result->subject->semester->name ?? null) }}
                 </h3>
             </div>
             <div class="kt-portlet__head-toolbar">
@@ -34,11 +34,11 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>Exam Year</th>
+                            <th>Student</th>
+                            <th>Exam</th>
                             <th>Exam Type</th>
-                            <th>Faculty</th>
-                            <th>Semester</th>
-                            <th>Appearence</th>
+                            <th>Subject</th>
+                            <th>Grade</th>
                             <th style="text-align: center">Actions</th>
                         </tr>
                         </thead>
@@ -51,7 +51,7 @@
 
 @push('script')
     <script type="application/javascript">
-        var url = '{{ route('admin.result.index') }}';
+        var url = '{{ route('admin.result.show', $id) }}';
         var resultTable = $('#result-table').DataTable({
             processing: true,
             serverSide: true,
@@ -64,11 +64,11 @@
             order: [[1, 'asc']],
             columns: [
                 {data: 'DT_RowIndex', searchable: false, orderable: false, width: '5%'},
-                {data: 'exam', name: 'exam'},
-                {data: 'exam_type', name: 'exam_type'},
-                {data: 'faculty', name: 'faculty'},
-                {data: 'semester', name: 'semester'},
-                {data: 'result_count', name: 'result_count'},
+                {data: 'name', name: 'users.name'},
+                {data: 'exam', name: 'exams.name'},
+                {data: 'exam_type', name: 'exam_types.name'},
+                {data: 'subject', name: 'subjects.name'},
+                {data: 'grade', name: 'grade'},
                 {data: 'action', 'name': 'action', searchable: false, orderable: false, className: 'dt-body-center'}
             ],
         });

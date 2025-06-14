@@ -1,7 +1,7 @@
 <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
     <div class="kt-header-mobile__logo">
         <a href="{{ route('admin.dashboard') }}">
-            <img alt="Logo" src="{{ getImageUrl($setting->logo) }}" height="30px" width="30px" />
+            <img alt="Logo" src="{{ getImageUrl($setting->logo ?? null) }}" height="30px" width="30px" />
         </a>
     </div>
     <div class="kt-header-mobile__toolbar">

@@ -50,7 +50,7 @@ abstract class BaseService
     public function select2DropDown($placeholder = 'Select a state', $value = 'name', $key = 'id')
     {
         $response = $this->all();
-        $response->prepend(['name' =>'Select Faculty', 'id' => null]);
+        $response->prepend(['name' =>$placeholder, 'id' => null]);
         return $response->pluck($value, $key);
 
     }

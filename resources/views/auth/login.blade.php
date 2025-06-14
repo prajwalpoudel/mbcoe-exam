@@ -10,7 +10,7 @@
                 <div class="kt-login__container">
         <div class="kt-login__logo">
             <a href="#">
-                <img src="{{ getImageUrl($setting->logo) }}" height="100" width="100">
+                <img src="{{ getImageUrl($setting->logo ?? null) }}" height="100" width="100">
             </a>
         </div>
         <div class="kt-login__signin">

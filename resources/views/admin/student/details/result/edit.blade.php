@@ -4,16 +4,16 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Add Result of {{$student->user->name}}</h3>
+                    <h3 class="kt-portlet__head-title">Edit Result of {{$student->user->name}}</h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
                     <a href="{{ url()->previous() }}"  type="button" class="btn btn-primary ">Back</a>&nbsp;
                     <a href="{{ route('admin.student.show', $student->id) }}"  type="button" class="btn btn-success ">Basic Info</a>
                 </div>
             </div>
-                {{ html()->modelForm(null, 'post')->route('admin.result.store')->class('kt-form kt-form--label-right')->open() }}
-                @include('admin.student.details.result.form', ['formAction' => 'Save'])
-                {{ html()->closeModelForm() }}
+            {{ html()->modelForm($result, 'put')->route('admin.result.update', $result->id)->class('kt-form kt-form--label-right')->open() }}
+            @include('admin.student.details.result.form', ['formAction' => 'Update'])
+            {{ html()->closeModelForm() }}
         </div>
     </div>
 @endsection
@@ -63,7 +63,7 @@
                         $('#semester').append(new Option(item.name, item.id));
                     });
                     if (selected) {
-                        $('#semester').append(selected.id).trigger('change');
+                        $('#semester').val(selected.id).trigger('change');
                     }
                 }
             });
@@ -87,4 +87,6 @@
         }
     </script>
 @endpush
+
+
 
