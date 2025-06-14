@@ -118,24 +118,6 @@ class MenuTableSeeder extends Seeder
                 ],
             ],
             [
-                "title" => "Section",
-                "class" => "nav-item",
-                "order" => 2,
-                "icon" => "fa fa-envelope",
-                "is_active" => true,
-                "route" => "admin.section.index",
-                "group_id" => MenuGroupConstant::ADMIN_ID,
-                "children" => [
-
-                ],
-                "related_routes" => [
-                    'admin.section.index',
-                    'admin.section.create',
-                    'admin.section.edit',
-                    'admin.section.destroy',
-                ],
-            ],
-            [
                 "title" => "Subject",
                 "class" => "nav-item",
                 "order" => 2,
@@ -151,6 +133,8 @@ class MenuTableSeeder extends Seeder
                     'admin.subject.create',
                     'admin.subject.edit',
                     'admin.subject.destroy',
+                    'admin.subject.import',
+                    'admin.subject.export-sample',
                 ],
             ],
             [
@@ -207,6 +191,8 @@ class MenuTableSeeder extends Seeder
                     'admin.student.show',
                     'admin.student.import',
                     'admin.student.semester',
+                    'admin.student.result.edit',
+                    'admin.student.result.create',
                     'admin.student.result',
                     'admin.student.transcript',
                 ]
@@ -246,6 +232,7 @@ class MenuTableSeeder extends Seeder
                     'admin.setting.index',
                     'admin.setting.create',
                     'admin.setting.edit',
+                    'admin.setting.semester',
                 ]
             ],
 

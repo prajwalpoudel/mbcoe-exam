@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\User;
+namespace App\Http\Controllers\Admin\User\Student;
 
 use App\Constants\RoleConstant;
 use App\Exports\StudentSampleExport;
@@ -91,7 +91,7 @@ class StudentController extends Controller
         $faculties = $this->facultyService->allForDropDown();
         $batches = $this->batchService->allForDropDown();
 
-        return view($this->view.'create', compact('faculties', 'batches'));
+        return view($this->view . 'create', compact('faculties', 'batches'));
     }
 
     /**
@@ -106,7 +106,7 @@ class StudentController extends Controller
         $semesters = $this->semesterService->query()
             ->where('faculty_id', $request->input('faculty_id'))
             ->where('order', '<', $semester->order)->pluck('id');
-        foreach($semesters as $sem) {
+        foreach ($semesters as $sem) {
             $semestersData[$sem] = ['is_current' => false];
         }
         $semestersData[$semester->id] = ['is_current' => true];
@@ -124,45 +124,8 @@ class StudentController extends Controller
     {
         $student = $this->studentService->find($id)->load(['user', 'faculty']);
 
-        return view($this->view.'details.basic', compact('student'));
+        return view($this->view . 'details.basic', compact('student'));
     }
-
-    /**
-     * @param string $id
-     * @return Container|mixed|object
-     */
-    public function semester(string $id) {
-        $student = $this->studentService->find($id);
-        $student->load(['user', 'faculty', 'semesters' => function($query) {
-            return $query->orderBy('order', 'desc');
-        }]);
-
-        return view($this->view.'details.semester.index', compact('student'));
-    }
-
-    public function result(string $id) {
-        $response = $this->studentService->result($id);
-        $student = $response['student'];
-        $data = $response['data'];
-        $exams = $response['exams'];
-
-        return view($this->view.'details.result.index', compact('student', 'data', 'exams'));
-    }
-
-    /**
-     * @param string $id
-     * @return \Illuminate\Http\Response
-     */
-    public function transcript(string $id) {
-        $response = $this->studentService->result($id);
-        $student = $response['student'];
-        $data = $response['data'];
-        $exams = $response['exams'];
-
-        $pdf = Pdf::loadView($this->view.'details.result.pdf.transcript', compact('exams', 'data', 'student'));
-        return $pdf->stream('transcript-'.$student->user->name.'.pdf');
-    }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -172,7 +135,7 @@ class StudentController extends Controller
         $faculties = $this->facultyService->allForDropDown();
         $batches = $this->batchService->allForDropDown();
 
-        return view($this->view.'edit', compact('student', 'faculties', 'batches'));
+        return view($this->view . 'edit', compact('student', 'faculties', 'batches'));
     }
 
     /**
@@ -187,7 +150,7 @@ class StudentController extends Controller
         $semesters = $this->semesterService->query()
             ->where('faculty_id', $request->input('faculty_id'))
             ->where('order', '<', $semester->order)->pluck('id');
-        foreach($semesters as $sem) {
+        foreach ($semesters as $sem) {
             $semestersData[$sem] = ['is_current' => false];
         }
         $semestersData[$semester->id] = ['is_current' => true];
@@ -202,15 +165,17 @@ class StudentController extends Controller
     /**
      * @return Container|mixed|object
      */
-    public function import() {
-        return view($this->view.'import');
+    public function import()
+    {
+        return view($this->view . 'import');
     }
 
     /**
      * @param Request $request
      * @return mixed
      */
-    public function storeImport(Request $request){
+    public function storeImport(Request $request)
+    {
         $file = $request->file('file');
         set_time_limit(300);
         Excel::import(new UsersImport, $file);
@@ -218,7 +183,8 @@ class StudentController extends Controller
         return $this->studentService->redirect('admin.student.index', 'success', 'Student imported successfully');
     }
 
-    public function exportSample() {
+    public function exportSample()
+    {
         return Excel::download(new StudentSampleExport, 'student.xlsx');
     }
 
@@ -233,5 +199,11 @@ class StudentController extends Controller
         $student->delete();
 
         return $this->studentService->redirect('admin.student.index', 'success', 'Student deleted successfully.');
+    }
+
+    public function getStudentsByFaculty($facultyId)
+    {
+        $students = $this->studentService->query()->where('faculty_id', $facultyId)->with(['user'])->get();
+        return response()->json($students);
     }
 }

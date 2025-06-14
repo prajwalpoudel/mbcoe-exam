@@ -7,8 +7,8 @@
     <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
         <div class="kt-aside__brand-logo">
             <a href="{{ route('admin.dashboard') }}" style="color:white; font-size:18px;">
-                <img class="img-logo" src="{{ getImageUrl($setting->logo) }}" alt="" height="30px" width="30px">
-                {{ $setting->site_name }}
+                <img class="img-logo" src="{{ getImageUrl($setting->logo ?? null) }}" alt="" height="30px" width="30px">
+                {{ $setting->site_name ?? null }}
             </a>
         </div>
         <div class="kt-aside__brand-tools">

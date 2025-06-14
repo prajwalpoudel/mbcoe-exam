@@ -12,7 +12,9 @@ use App\Http\Controllers\Admin\SemesterController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\SyllabusController;
-use App\Http\Controllers\Admin\User\StudentController;
+use App\Http\Controllers\Admin\User\Student\ResultController as StudentResultController;
+use App\Http\Controllers\Admin\User\Student\SemesterController as StudentSemesterController;
+use App\Http\Controllers\Admin\User\Student\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -32,21 +34,33 @@ Route::middleware('auth')->group(function () {
     Route::get('student/import', [StudentController::class, 'import'])->name('student.import');
     Route::get('student/export-sample', [StudentController::class, 'exportSample'])->name('student.export-sample');
     Route::post('student/import', [StudentController::class, 'storeImport'])->name('student.store-import');
-    Route::get('student/{id}/semester', [StudentController::class, 'semester'])->name('student.semester');
-    Route::get('student/{id}/result', [StudentController::class, 'result'])->name('student.result');
-    Route::get('student/{id}/transcript', [StudentController::class, 'transcript'])->name('student.transcript');
+    Route::get('student/{id}/semester', [StudentSemesterController::class, 'index'])->name('student.semester');
+    Route::get('student/{id}/semester/create', [StudentSemesterController::class, 'create'])->name('student.semester.create');
+    Route::delete('student/{id}/semester/delete', [StudentSemesterController::class, 'destroy'])->name('student.semester.destroy');
+    Route::get('student/{id}/result', [StudentResultController::class, 'index'])->name('student.result');
+    Route::get('student/{id}/result/create', [StudentResultController::class, 'create'])->name('student.result.create');
+    Route::get('student//result/{id}/edit', [StudentResultController::class, 'edit'])->name('student.result.edit');
+    Route::delete('student/result/{id}/delete', [ResultController::class, 'destroy'])->name('student.result.destroy');
+    Route::get('student/{id}/transcript', [StudentResultController::class, 'transcript'])->name('student.transcript');
 
     Route::resource('student', StudentController::class);
+    Route::resource('result', ResultController::class)->except(['show']);
     Route::get('result/import', [ResultController::class, 'import'])->name('result.import');
     Route::post('result/import', [ResultController::class, 'storeImport'])->name('result.store-import');
     Route::get('result/export', [ResultController::class, 'export'])->name('result.export');
     Route::post('result/export', [ResultController::class, 'exportSample'])->name('result.export-sample');
     Route::get('result', [ResultController::class, 'index'])->name('result.index');
     Route::get('result/{id}', [ResultController::class, 'show'])->name('result.show');
+    Route::get('setting/semester', [SettingController::class, 'semester'])->name('setting.semester');
+    Route::put('setting/semester', [SettingController::class, 'updateSemester'])->name('setting.semester');
     Route::resource('setting', SettingController::class)->only(['index', 'edit', 'update']);
     Route::resource('profile', ProfileController::class)->only(['index', 'edit', 'update']);
 
     Route::prefix('api')->group(function () {
         Route::get('faculty/{faculty}/semesters', [SemesterController::class, 'getSemestersByFaculty']);
+        Route::get('faculty/{faculty}/students', [StudentController::class, 'getStudentsByFaculty']);
+        Route::get('semester/{semester}/syllabus/{syllabus}/subjects', [SubjectController::class, 'getSubjectsBySemesterandSyllabus']);
+        Route::get('student/{student}/syllabus/', [SyllabusController::class, 'getSyllabusByStudent']);
+
     });
 });

@@ -7,7 +7,7 @@
                     <h3 class="kt-portlet__head-title">Semesters</h3>
                 </div>
                 <div class="kt-portlet__head-toolbar">
-                    <a href="#" class="btn btn-success btn-pill btn-sm">
+                    <a href="{{ route('admin.student.semester.create', $student->id) }}" class="btn btn-success btn-pill btn-sm">
                         Create
                     </a>
                 </div>
@@ -38,13 +38,19 @@
                                 </span>
                             </td>
                             <td>
-                                <a class="btn btn-danger btn-sm blue btn-outline mr-1 pr-2" href="javascript:;"
-                                   onclick="">
+                                @if($student->semesters->count() > 1 && $semester->pivot->is_current == 1)
+                                    <a class="btn btn-danger btn-sm blue btn-outline mr-1 pr-2" href="javascript:;"
+                                   onclick="confirmation('delete-semester-form')">
                                     <i class="la la-trash"></i>
-{{--                                    {{ html()->form('delete')->route($params['route'].'.destroy',$params['id'])->id('delete-'.$params['id'])->open() }}--}}
+                                    {{ html()->form('delete')->route('admin.student.semester.destroy', $semester->pivot->student_id)->id('delete-semester-form')->open() }}
 
-{{--                                    {{ html()->form()->close() }}--}}
+                                    {{ html()->form()->close() }}
                                 </a>
+                                @else
+                                    <a class="btn btn-danger btn-sm blue btn-outline mr-1 pr-2 anchor-disabled" href="javascript:;">
+                                        <i class="la la-trash"></i>
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -66,3 +72,34 @@
         </div>
     </div>
 @endsection
+@push('style')
+    <style>
+        .anchor-disabled {
+            opacity: .4;
+            cursor: default !important;
+            pointer-events: none;
+        }
+    </style>
+@endpush
+@push('script')
+    <script>
+        function confirmation(formId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Do It!"
+            }).then(function(result) {
+                if (result.value) {
+                    document.getElementById(formId).submit();
+                    Swal.fire(
+                        "Done!",
+                        "Your action has been completed.",
+                        "success"
+                    )
+                }
+            });
+        };
+    </script>
+@endpush

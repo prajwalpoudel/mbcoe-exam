@@ -65,20 +65,22 @@
             </div>
             <div class="row mt-4">
                 <div class="col-lg-12">
-                    <table class="table table-striped table-bordered table-hover table-responsive table-checkable order-column dataTable no-footer" width="100%" id="subject-table">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Faculty</th>
-                    <th>Semester</th>
-                    <th>Syllabus</th>
-                    <th>Course Code</th>
-                    <th>Credit Hour</th>
-                    <th style="text-align: center">Actions</th>
-                </tr>
-                </thead>
-            </table>
+                    <table
+                        class="table table-striped table-bordered table-hover table-responsive table-checkable order-column dataTable no-footer"
+                        width="100%" id="subject-table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Faculty</th>
+                            <th>Semester</th>
+                            <th>Syllabus</th>
+                            <th>Course Code</th>
+                            <th>Credit Hour</th>
+                            <th style="text-align: center">Actions</th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -97,7 +99,7 @@
             ajax: {
                 url: url,
                 data: function (d) {
-                        d.faculty = $('#faculty').val(),
+                    d.faculty = $('#faculty').val(),
                         d.semester = $('#semester').val(),
                         d.syllabus = $('#syllabus').val()
                 },
@@ -114,7 +116,7 @@
                 {data: 'action', 'name': 'action', searchable: false, orderable: false, className: 'dt-body-center'}
             ],
         });
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#faculty').change(function () {
                 subjectTable.draw();
             });

@@ -60,7 +60,7 @@
                                 </span>
                             </span>
                         </a>
-                        <a href="{{ route('admin.student.result', $student->id) }}" class="kt-widget__item {{ request()->route()->getName() == "admin.student.result" ?  "kt-widget__item--active" : ""}}">
+                        <a href="{{ route('admin.student.result', $student->id) }}" class="kt-widget__item {{ in_array(request()->route()->getName(), ['admin.student.result', 'admin.student.result.create', 'admin.student.result.edit'])  ?  "kt-widget__item--active" : "" }}">
                             <span class="kt-widget__section">
                                 <span class="kt-widget__icon">
                                     <i class="la la-random"></i>

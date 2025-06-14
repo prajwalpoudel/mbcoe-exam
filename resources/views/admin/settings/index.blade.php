@@ -13,6 +13,9 @@
             </div>
             <div class="kt-portlet__head-toolbar">
                 <div class="kt-portlet__head-actions">
+                    <a href="{{ route('admin.setting.semester') }}" class="btn btn-primary btn-pill btn-md">
+                        Update Semester
+                    </a>
                     <a href="{{ route('admin.setting.edit', $setting->id) }}" class="btn btn-success btn-pill btn-sm">
                         Edit
                     </a>

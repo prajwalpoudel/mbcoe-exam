@@ -154,4 +154,10 @@ class SubjectController extends Controller
 
         return redirect()->back();
     }
+
+    public function getSubjectsBySemesterandSyllabus($semesterId, $syllabusId) {
+        $subjects = $this->subjectService->getWhere(['semester_id' => $semesterId, 'syllabus_id' => $syllabusId]);
+        return response()->json($subjects);
+    }
+
 }

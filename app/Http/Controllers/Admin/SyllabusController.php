@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SyllabusRequest;
+use App\Services\StudentService;
 use App\Services\SyllabusService;
 use Illuminate\Http\Request;
 
@@ -17,16 +18,23 @@ class SyllabusController extends Controller
      * @var SyllabusService
      */
     private $syllabusService;
+    /**
+     * @var StudentService
+     */
+    private $studentService;
 
     /**
      * SyllabusController constructor.
      * @param SyllabusService $syllabusService
+     * @param StudentService $studentService
      */
     public function __construct(
-        SyllabusService $syllabusService
+        SyllabusService $syllabusService,
+        StudentService $studentService
     )
     {
         $this->syllabusService = $syllabusService;
+        $this->studentService = $studentService;
     }
 
     /**
@@ -93,5 +101,11 @@ class SyllabusController extends Controller
         $this->syllabusService->destroy($id);
 
         return redirect()->back();
+    }
+
+    public function getSyllabusByStudent($studentId) {
+        $student = $this->studentService->find($studentId)->load(('batch'));
+        $syllabusId = $student->batch->syllabus_id;
+        return response()->json($syllabusId);
     }
 }

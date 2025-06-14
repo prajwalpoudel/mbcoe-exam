@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constants\GradeConstant;
 use App\Exports\ResultExport;
 use App\Exports\StudentSampleExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ResultRequest;
 use App\Http\Requests\Admin\StudentRequest;
 use App\Imports\ResultImport;
 use App\Imports\UsersImport;
@@ -81,8 +83,61 @@ class ResultController extends Controller
         return view($this->view . 'index');
     }
 
-    public function show() {
+    public function create() {
+        $faculties = $this->facultyService->allForDropDown();
+        $exams = $this->examService->allForDropDown('exam_name');
+        $syllabi = $this->syllabusService->allForDropDown();
+        $grades = collect(GradeConstant::GRADES);
 
+        return view($this->view.'create', compact('faculties', 'exams', 'syllabi', 'grades'));
+    }
+
+    public function store(ResultRequest $request) {
+        $this->resultService->create($request->all());
+        return redirect()->back()->with(
+            [
+                'message' => [
+                    'status' => 'success',
+                    'title' => 'Result Added Successfully.'
+                ]
+            ]);
+    }
+
+    public function show(Request $request, $id) {
+        $result = $this->resultService->query()->withTrashed()->find($id);
+        $result->load(['exam', 'subject.semester', 'student.faculty']);
+        if ($request->wantsJson()) {
+            $examId = $result->exam_id;
+            $examTypeId = $result->exam->exam_type_id;
+            $semesterId = $result->subject->semester_id;
+            $facultyId = $result->student->faculty_id;
+            return $this->resultService->studentWiseDatatable($request, ['exam_id' => $examId, 'exam_types.id' => $examTypeId, 'semesters.id' => $semesterId, 'faculties.id' => $facultyId], 'admin.result');
+        }
+        return view($this->view . 'show', compact('result', 'id'));
+    }
+
+    public function edit(string $id)
+    {
+        $result = $this->resultService->find($id)->load('subject.semester', 'student.user');
+        $faculties = $this->facultyService->allForDropDown();
+        $exams = $this->examService->allForDropDown('exam_name');
+        $syllabi = $this->syllabusService->allForDropDown();
+        $grades = collect(GradeConstant::GRADES);
+
+        return view($this->view.'edit', compact('result'
+            , 'faculties', 'exams', 'syllabi', 'grades'));
+    }
+
+    public function update(ResultRequest $request, $id) {
+        $redirect = $request->input('redirect') ? route('admin.result.show', $id) : route('admin.student.result', $request->input('student_id'));
+        $this->resultService->update($id, $request->all());
+        return redirect($redirect)->with(
+            [
+                'message' => [
+                    'status' => 'success',
+                    'title' => 'Result Updated Successfully.'
+                ]
+            ]);
     }
 
     /**
@@ -128,5 +183,20 @@ class ResultController extends Controller
         $semester = $this->semesterService->find($request->input('semester_id'))->name;
         $faculty = $this->facultyService->find($request->input('faculty_id'))->name;
         return Excel::download(new ResultExport($request->all()), 'result'.$faculty.'-'.$semester.'.xlsx');
+    }
+
+    public function destroy($id) {
+        $result = $this->resultService->find($id);
+//        $prevStudPath = str_contains(url()->previous(), 'student');
+//        $redirect = $prevStudPath ? route('admin.student.result', $result->student_id) : route('admin.result.show', $id) ;
+        $this->resultService->destroy($id);
+
+        return redirect()->back()->with(
+            [
+                'message' => [
+                    'status' => 'success',
+                    'title' => 'Result Deleted Successfully.'
+                ]
+            ]);
     }
 }

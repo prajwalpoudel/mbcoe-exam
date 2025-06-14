@@ -49,7 +49,9 @@ class ResultService extends BaseService
             ->join('exams', 'results.exam_id', '=', 'exams.id')
             ->join('exam_types', 'exams.exam_type_id', '=', 'exam_types.id')
             ->select('results.id as id', 'faculties.name as faculty', 'semesters.name as semester', 'exams.name as exam', 'exam_types.name as exam_type', DB::raw('count(*) as result_count'))
-            ->groupBy('faculty', 'semester', 'exam', 'exam_type')->get();
+            ->groupBy('faculty', 'semester', 'exam', 'exam_type')
+            ->where('results.deleted_at', null)
+            ->get();
 
         return $this->dataTables->of($results)
             ->addColumn('action', function ($result) {
@@ -59,6 +61,35 @@ class ResultService extends BaseService
                     'edit' => false,
                     'delete' => false,
                     'show' => true
+                ];
+
+                return view('admin.datatable.action', compact('params'));
+            })
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function studentWiseDatatable(Request $request, array $where, $redirect = 'admin.student.result')
+    {
+        $results = $this->query()
+            ->join('exams', 'exams.id', '=', 'results.exam_id')
+            ->join('subjects', 'subjects.id', '=', 'results.subject_id')
+            ->join('students', 'students.id', '=', 'results.student_id')
+            ->join('semesters', 'subjects.semester_id', '=', 'semesters.id')
+            ->join('faculties', 'students.faculty_id', '=', 'faculties.id')
+            ->join('exam_types', 'exam_types.id', '=', 'exams.exam_type_id')
+            ->join('users', 'users.id', '=', 'students.user_id')
+            ->where($where)
+            ->select('results.id as id','subjects.name as subject', 'exams.name as exam', 'exam_types.name as exam_type', 'grade', 'remarks', 'users.name as name');
+
+        return DataTables::of($results)
+            ->addColumn('action', function ($result) use($redirect) {
+                $params = [
+                    'route' => $redirect,
+                    'id' => $result->id,
+                    'edit' => true,
+                    'delete' => true,
                 ];
 
                 return view('admin.datatable.action', compact('params'));
