@@ -86,10 +86,10 @@ class StudentService extends BaseService
             ->join('exam_types', 'exams.exam_type_id', '=', 'exam_types.id')
             ->whereNull('results.deleted_at');
 
-        $exams = (clone $resultResponse)->select('exams.name as exam', 'exam_types.name as examType', 'semesters.display_name as semester')
-            ->groupBy('exam', 'examType', 'semester')->orderBy('exam')->orderBy('examType', 'desc')->get();
-        $results = (clone $resultResponse)->select('exams.name as exam', 'exam_types.name as examType', 'semesters.display_name as semester', 'subjects.name as subject', 'grade')
-            ->orderBy('exam')->orderBy('examType', 'desc')
+        $exams = (clone $resultResponse)->select('exams.name as exam', 'exam_types.name as examType', 'semesters.display_name as semester', 'exams.order as order')
+            ->groupBy('exam', 'examType', 'semester')->orderBy('order', 'asc')->get();
+        $results = (clone $resultResponse)->select('exams.name as exam', 'exams.order as order', 'exam_types.name as examType', 'semesters.display_name as semester', 'subjects.name as subject', 'grade')
+            ->orderBy('order', 'asc')
             ->get();
 
 

@@ -18,12 +18,22 @@
 
     <div class="form-group row validated">
         <div class="col-lg-6">
+            {{ html()->label('Order') }}
+            {{ html()->number('order')->class($errors->has('order') ? 'form-control is-invalid' : 'form-control') }}
+            @error('order')
+            <div id="" class="error invalid-feedback"> {{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="col-lg-6">
             {{ html()->label('Start Date') }}
             {{ html()->date('start_date')->class($errors->has('start_date') ? 'form-control is-invalid' : 'form-control') }}
             @error('start_date')
             <div id="" class="error invalid-feedback"> {{ $message }}</div>
             @enderror
         </div>
+    </div>
+    <div class="form-group row validated">
         <div class="col-lg-6">
             {{ html()->label('End Date') }}
             {{ html()->date('end_date')->class($errors->has('end_date') ? 'form-control is-invalid' : 'form-control') }}
@@ -31,9 +41,7 @@
             <div id="" class="error invalid-feedback"> {{ $message }}</div>
             @enderror
         </div>
-
     </div>
-</div>
 
 <div class="kt-portlet__foot">
     <div class="kt-form__actions">
