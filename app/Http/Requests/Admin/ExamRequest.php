@@ -24,6 +24,7 @@ class ExamRequest extends FormRequest
         return [
             'exam_type_id' => 'required',
             'name' => 'required',
+            'order' => 'required|numeric',
             'start_date' => 'required',
             'end_date' => 'required'
         ];

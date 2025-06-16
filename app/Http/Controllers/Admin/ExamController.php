@@ -82,7 +82,7 @@ class ExamController extends Controller
     public function edit(string $id)
     {
         $exam = $this->examService->find($id);
-        $examTypes = $this->examService->allForDropDown();
+        $examTypes = $this->examTypeService->allForDropDown();
         return view($this->view.'edit', compact('exam', 'examTypes'));
     }
 
